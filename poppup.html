@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blood Request Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #fdf2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 500px;
+      margin: auto;
+      background: white;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      position: relative;
+    }
+    h2 {
+      text-align: center;
+      color: #b30000;
+    }
+    label {
+      display: block;
+      margin: 15px 0 5px;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      box-sizing: border-box;
+    }
+    button {
+      margin-top: 20px;
+      width: 100%;
+      padding: 10px;
+      background-color: #b30000;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    button:hover {
+      background-color: #990000;
+    }
+
+    /* Popup styling */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      width: 80%;
+      max-width: 400px;
+      transform: translate(-50%, -50%);
+      background-color: #fff;
+      padding: 25px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+      border-radius: 10px;
+      z-index: 9999;
+      text-align: center;
+    }
+
+    .popup h3 {
+      color: #b30000;
+    }
+
+    .popup p {
+      margin-top: 10px;
+      font-size: 15px;
+      color: #333;
+    }
+
+    .popup button {
+      margin-top: 15px;
+      background-color: #b30000;
+      color: white;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .popup button:hover {
+      background-color: #990000;
+    }
+
+    .overlay {
+      position: fixed;
+      display: none;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 9998;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Blood Request Form</h2>
+    <form id="bloodForm">
+      <label for="name">Full Name:</label>
+      <input type="text" id="name" required />
+
+      <label for="bloodType">Blood Type:</label>
+      <select id="bloodType" required>
+        <option value="">--Select--</option>
+        <option value="A+">A+</option>
+        <option value="B+">B+</option>
+        <option value="O+">O+</option>
+        <option value="AB+">AB+</option>
+        <!-- add others as needed -->
+      </select>
+
+      <label for="units">Number of Units:</label>
+      <input type="number" id="units" min="1" required />
+
+      <label for="hospital">Hospital Name:</label>
+      <input type="text" id="hospital" required />
+
+      <label for="contact">Contact Number:</label>
+      <input type="tel" id="contact" required />
+
+      <button type="submit">Submit Request</button>
+    </form>
+  </div>
+
+  <!-- Overlay and Popup -->
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="popup">
+    <h3>✅ Thank You!</h3>
+    <p>
+      Your blood request has been received successfully.<br>
+      Our team is reviewing it, and we’ll contact you shortly.<br>
+      If it's urgent, please call our emergency helpline: <strong>[Phone Number]</strong>.
+    </p>
+    <button onclick="closePopup()">OK</button>
+  </div>
+
+  <script>
+    const form = document.getElementById('bloodForm');
+    const popup = document.getElementById('popup');
+    const overlay = document.getElementById('overlay');
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+
+      // (Optional) Gather form data
+      const data = {
+        name: document.getElementById('name').value,
+        bloodType: document.getElementById('bloodType').value,
+        units: document.getElementById('units').value,
+        hospital: document.getElementById('hospital').value,
+        contact: document.getElementById('contact').value
+      };
+
+      console.log("Submitted:", data);
+
+      // Show the popup
+      popup.style.display = 'block';
+      overlay.style.display = 'block';
+
+      // Reset the form
+      form.reset();
+    });
+
+    function closePopup() {
+      popup.style.display = 'none';
+      overlay.style.display = 'none';
+    }
+  </script>
+
+</body>
+</html>
