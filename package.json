@@ -1,0 +1,29 @@
+{
+  "name": "bloodbank-services",
+  "version": "1.0.0",
+  "description": "The presented HTML, Css and Javascript code outlines a web page for a blood bank system. The site features a navigation bar with links for obtaining help, making donations, volunteering, and learning about the organization. The main section emphasizes a six-step process, urging users to register, post blood requests, respond, receive notifications, and ultimately contribute to saving lives. The footer includes copyright information, an invitation to join the cause, and links to the organization's social media platforms. Overall, the system aims to facilitate blood donations, connecting donors and recipients in a user-friendly manner through online registration and request posting.",
+  "main": "Register.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Ayushhap/BloodBank-Services.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Ayushhap/BloodBank-Services/issues"
+  },
+  "homepage": "https://github.com/Ayushhap/BloodBank-Services#readme",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "mongodb": "^5.9.2",
+    "uuid": "^11.1.0"
+  }
+}

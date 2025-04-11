@@ -1,34 +1,69 @@
-const passwordInput = document.querySelector("#password_data");
+const express = require('express');
+const router = express.Router();
+const { getUserByEmail, createUser, getUserById } = require('./db');
+const { v4: uuidv4 } = require('uuid');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
 
-passwordInput.addEventListener("keyup", () => {
-    let password = passwordInput.value;
-    
-    var strongRegex = new RegExp("^(?=.{14,})(?=.*[A-Z])(?=.*[a-z])(?=.*[0-9])(?=.*\\W).*$", "g");
-    var mediumRegex = new RegExp("^(?=.{10,})(((?=.*[A-Z])(?=.*[a-z]))|((?=.*[A-Z])(?=.*[0-9]))|((?=.*[a-z])(?=.*[0-9]))).*$", "g");
+// POST /api/register – Register a new user
+router.post('/api/register', async (req, res) => {
+  try {
+    console.log('Registration request received:', req.body);
 
-    if(password.length===0)
-    {
-        document.querySelector(".safety").innerHTML = "Enter Password";
-    }
-    else
-    {
-        document.querySelector(".safety").innerHTML = '<span>Password Strength</span><span class="line" id="line1"></span><span class="line" id="line2"></span><span class="line" id="line3"></span>';
+    const { email, password, name } = req.body;
+
+    // Basic validation
+    if (!email || !password || !name) {
+      return res.status(400).json({ error: 'Email, password, and name are required.' });
     }
 
-    if (strongRegex.test(password)) 
-    {
-        document.querySelector("#line1").style.background = "green";
-        document.querySelector("#line2").style.background = "green";
-        document.querySelector("#line3").style.background = "green";
-    } 
-    else if (mediumRegex.test(password)) 
-    {
-        document.querySelector("#line1").style.background = "yellow";
-        document.querySelector("#line2").style.background = "yellow";
-    } 
-    else 
-    {
-        document.querySelector("#line1").style.background = "red";
-        
+    // Check for existing user
+    const existingUser = await getUserByEmail(email);
+    if (existingUser) {
+      return res.status(409).json({ error: 'User already exists with this email.' });
     }
-})
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Create user object
+    const newUser = {
+      _id: uuidv4(),
+      email,
+      password: hashedPassword,
+      name,
+      createdAt: new Date().toISOString()
+    };
+
+    // Save user to database
+    await createUser(newUser);
+
+    // Return user info (excluding password)
+    const { password: _, ...userWithoutPassword } = newUser;
+    return res.status(201).json(userWithoutPassword);
+
+  } catch (err) {
+    console.error('Registration error:', err);
+    return res.status(500).json({ error: 'Registration failed. Please try again later.' });
+  }
+});
+
+// GET /api/register/:id – Get user by ID
+router.get('/api/register/:id', async (req, res) => {
+  try {
+    const user = await getUserById(req.params.id);
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found.' });
+    }
+
+    const { password, ...userWithoutPassword } = user;
+    return res.json(userWithoutPassword);
+
+  } catch (err) {
+    console.error('Error retrieving user:', err);
+    return res.status(500).json({ error: 'Failed to retrieve user. Please try again later.' });
+  }
+});
+
+module.exports = router;

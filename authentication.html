@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Verification</title>
+    <style>
+        :root {
+            --primary-color: #e63946;
+            --secondary-color: #f1faee;
+            --accent-color: #a8dadc;
+            --dark-color: #1d3557;
+            --light-color: #f8f9fa;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .form-container {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+            transition: transform 0.3s ease;
+        }
+        
+        .form-container:hover {
+            transform: translateY(-5px);
+        }
+        
+        h2 {
+            text-align: center;
+            color: var(--dark-color);
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            font-size: 1.8rem;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--dark-color);
+            font-weight: 500;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px 15px;
+            margin-bottom: 1rem;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(168, 218, 220, 0.3);
+        }
+        
+        button {
+            width: 100%;
+            background: linear-gradient(to right, var(--primary-color), #d62839);
+            color: white;
+            padding: 14px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        button:hover {
+            background: linear-gradient(to right, #d62839, var(--primary-color));
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        @media (max-width: 480px) {
+            .form-container {
+                padding: 1.5rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Document Verification</h2>
+    <form id="licenceForm">
+        <label for="name">Full Name:</label>
+        <input type="text" id="name" required>
+
+        <label for="dob">Date of Birth:</label>
+        <input type="date" id="dob" required>
+
+        <label for="licenceNumber">Licence Number:</label>
+        <input type="text" id="licenceNumber" required>
+
+        <!-- <label for="Blood Test Report">Blood Test Report</label>
+        <select id="Blood test Report" required>
+            
+        </select> -->
+
+        <!-- Label -->
+<label for="bloodTestReport">Blood Test Report</label>
+
+<!-- File Upload Input -->
+<input type="file" id="bloodTestReport" accept=".pdf,.jpg,.jpeg,.png" required>
+
+<!-- Placeholder to show the uploaded file (preview or link) -->
+<div id="reportPreview" style="margin-top:10px;"></div>
+
+<!-- Optional icon or visual -->
+<i class="fa fa-address-card-o" aria-hidden="true" style="font-size:24px;"></i>
+
+<!-- Script to preview the uploaded report -->
+<script>
+  document.getElementById('bloodTestReport').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById('reportPreview');
+
+    if (file) {
+      const fileURL = URL.createObjectURL(file);
+      if (file.type === "application/pdf") {
+        preview.innerHTML = <p>PDF uploaded: <a href="${fileURL}" target="_blank">View Report</a></p>;
+      } else if (file.type.startsWith("image/")) {
+        preview.innerHTML = <p>Image preview:</p><img src="${fileURL}" alt="Blood Test Report" style="max-width:300px; border:1px solid #ccc; border-radius:8px;">;
+      } else {
+        preview.textContent = "Unsupported file type.";
+      }
+    } else {
+      preview.textContent = "";
+    }
+  });
+</script>
+
+
+        <label for="bloodGroup">Blood Group:</label>
+        <select id="bloodGroup" required>
+            <option value="">Select</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+        </select>
+
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('licenceForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const name = document.getElementById('name').value;
+        const dob = document.getElementById('dob').value;
+        const licenceNumber = document.getElementById('licenceNumber').value;
+        const vehicleType = document.getElementById('vehicleType').value;
+        const bloodGroup = document.getElementById('bloodGroup').value;
+
+        if(name && dob && licenceNumber && vehicleType && bloodGroup) {
+            alert('Driving Licence Details Submitted Successfully!\n\nName: ${name}\nDOB: ${dob}\nLicence No: ${licenceNumber}\nVehicle Type: ${vehicleType}\nBlood Group: ${bloodGroup}');
+        } else {
+            alert('Please fill all the fields.');
+        }
+    });
+</script>
+
+</body>
+</html>
